@@ -7,9 +7,10 @@ const router = Router();
 
 router.get("/report", async (req, res) => {
   try {
-    const lang = req.query.lang || "en";
-    const response = await connectionClient.query("");
-    const buffer = generateBovineReport(response, { lang });
+    const lang = req.query.lang.toString() || "en";
+    const response = await connectionClient.query("SELECT * from bovines");
+    const bovines = await response.rows;
+    const buffer = generateBovineReport(bovines, { lang });
     //configurar diseño excel reporte
     const date = format(new Date(), "dd-MM-yyyy hh-mm");
     res.setHeader(
